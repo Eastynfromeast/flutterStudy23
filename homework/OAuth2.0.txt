@@ -1,0 +1,127 @@
+# OAuth 2
+
+**참고 사이트** 
+
+    https://opentutorials.org/course/3405
+
+3개의 참여자
+    나 (.org)   
+        연동하면 아주 간단해서 좋음 
+        하지만 보안 문제는 역시 있음 
+
+    연동 서비스 (구글, 페이스북, 트위터)
+        자신들의 사용자의 아이디와 비밀번호를 신뢰할 수 없는 사람이 가지고 있으면 문제가 생기니까 골치 아픔
+
+    유저
+        믿을 수가 없다…!
+        보안 사고
+⇒ OAuth
+
+유저 요청 → access token 
+    그들의 서비스 
+    나
+        access token을 얻어낼 수 있다 
+        access token → 나의 서비스가 필요한 필수적인 기능만 부분적으로 허용 
+    목적 : access token을 발급하는 것
+
+### OAuth를 통해 access token 얻는 방법 알아내기
+
+### 역할
+
+    나 → Client
+    유저 → Resource Owner
+    그들 (연동 서비스) → Resource Server 데이터를 가지고 있는 서버
+    Authorization Server 인증 관련 처리하는 서버 
+
+### 등록
+    Client 리소스 서버에 승인을 미리 받아놔야 
+        Client ID : 식별자 ID
+        Client Secret : 비밀번호 절대로 외부에 노출되면 안돼 
+        Authorized redirect URIs : 리소스 서버가 주는 authorized code를 받을 때 받는 주소, 리소스 서버는 이쪽으로만 코드를 줄 것
+
+### 인증 받기
+    리소스 오너
+        클라이언트를 이용하려고 함 
+
+    클라이언트
+        리소스 서버의 정보를 사용하려면 **오너의 동의**를 구해야 
+        → 로그인 with 연동서비스 버튼에 걸려있는 링크 
+            https://resource.server/
+            ?client_id=1 : 클라이언트 아이디 값
+            &scope=B,C : 우리가 사용하려는 기능의 스코프 값
+            &redirect_uri=https://client/callback 
+
+    리소스 서버
+        A, [B, C], D 필요한 기능에만 인증 얻기 
+        오너가 로그인 안되어 있으며 로그인 하라고 로그인 창 주고
+        로그인 되어 있으면 저 값이 맞는지 확인
+        
+        맞으면 기능 이용하도록 동의하는 창 보여주고
+        맞지 않으면 그냥 종료해 버림 
+
+### 리소스 서버가 승인하려면?
+
+    리소스 서버
+        임시 비밀번호 → authorization code : 3
+        코드 외에도 3가지 방법 더 있어요
+        location : https://client/callback?code=3
+
+    리소스 오너
+        https://client/callback?code=3 로 이동
+
+    클라이언트
+        오너가 해당 location으로 이동하면서 그 주소로 코드를 알 수 있음 
+        https://resource.server/token?
+        grant_type=authorization_code&
+        code=3&
+        redirect_uri=https://client/callback&
+        client_id=1&
+        client_secret=2 절대적으로 중요한 비번까지 보냄
+
+### Access Token 발급
+
+    리소스 서버
+        ~~임시 비밀번호 → authorization code : 3~~
+        authorization code를 지워버림
+        access token 발급 
+
+    클라이언트
+        access token = 4 를 받아서 저장함
+        → 리소스 오너 1에 대한 access token 4를 가지게 된 것 
+
+    리소스 오너
+        https://client/callback?code=3 로 이동
+
+### API 호출
+Application Programming Interface
+클라이언트가 Access token을 활용해서 리소스 서버를 핸들링할 수 있도록 함
+
+방법
+    access token query parameter
+        주소?access_token=accesstoken
+    curl -H Authorization: Bearer <access_token>
+        더 안전하고 선호되는 방법
+
+### Refresh Token
+
+Access token 
+    수명이 있다. 짧으면 1~2시간, 길면 60~90일 정도
+    수명이 끝날 때마다 다시 받도록 하기 힘들어 
+
+OAuth 2.0 RFC (Request for Comments 문서는 **비평을 기다리는 문서**라는 의미로, 컴퓨터 네트워크 공학 등에서 인터넷 기술에 적용 가능한 새로운 연구, 혁신, 기법 등을 아우르는 메모를 나타낸다.)
+    **6749번**
+    https://datatracker.ietf.org/doc/html/rfc6749
+    access token이 만기되면 client가 authorization server에 refresh token 요청
+    리소스 서버마다 refreshing하는 방법 다름 
+
+### 수업을 마치며
+OAuth2.0
+    인증 과정에 참여하고 있는 3자가 서로 만날 수 없는 과정에서 어떻게 하면 서로의 신뢰를 할 수 있을까? 에서 출발
+
+공부할 만한 주제
+    신뢰할 수 있는 서버를 통해 access token을 전달해
+    리소스 서버에서 사용되는 리소스 오너의 고유한 식별자를 획득 가능 
+    -> federated identity 
+
+    궁극의 목적 : api 이용하기
+    Restful, JSON, XML
