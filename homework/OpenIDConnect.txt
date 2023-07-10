@@ -2,11 +2,15 @@
 	- 서로 연계된 서비스 간에 사용자의 인증 등을 오픈해주는 기술
 	- OIDC Foundation에서 지속적으로 발전시키고 있음 (https://openid.net)
 
-# IDP?
-	IDentity Provider의 약자
-	Google, Apple 등과 같은 간편 로그인 서비스 제공 회사 
-	- 역할
-		특정 서비스에서 로그인할 수 있도록 사용자를 신원증명(aka 인증)
+    ## IDP? RP
+	- IDP(IDentity Provider)
+		Google, Apple 등과 같은 간편 로그인 서비스 제공 회사 
+		서비스 제공 당사자
+		- 역할
+			특정 서비스에서 로그인할 수 있도록 사용자를 신원증명(aka 인증)
+	- RP (Relying Party)
+		사용자를 인증하기 위해 IDP에 의존하는 주체 
+		== OOO로 로그인하기 같은 기능을 사용하는 서비스
 
 	IDP와 SP(Service Provider) 사이 사용자 인증을 위한 증명 정보 통신 필요 
 	=> 대표 기술 OAuth 2.0
@@ -38,10 +42,30 @@
 		컨슈머 앱(앱스토어/구글 플레이스토어에 올라가있는 앱) 간의 SSO 인가 목적
 		JSON으로 개발됨 (글 작성 시점 기준 OIDC 2.0)
 
-# OIDC
+# OIDC와 OAuth2.0의 차이
 	OAuth 위에서 구동되는 기술
 	인가에 목적이 있는 OAuth의 절차가 복잡 -> 좀 더 간단하게 하고자 나온 기술 
+
+	OAuth : 인가(Authorization)이 주요 목적
+		앱이 승인한 사용자에 대한 정보를 명시적으로 제공하지 않고,
+		액세스 토큰으로 권한 제공
+		like 호텔 카드 키 <- 소유자의 신원 확인은 불가
+		=> 리소스 서버로부터 리소스를 가져오기 위한 액세스 토큰 확보 
+
+	OpenID : 인증(Authentication)이 주요 목적
+		ID token으로 사용자 신원 정보 확인 가능 like 주민등록증 
+		=> 사용자의 신원 정보가 담긴 ID 토큰 확보 
 
 	인증을 위한 토큰을 보낼 때 Access Token 와 ID Token을 함께 보낼 수 있음
 	=> transaction이 반으로 줄어 인증 속도가 빨라지며
 		네트워크에 부담을 덜 줌 
+
+# OIDC 인증 과정
+	OIDC는 OAuth2.0을 바탕으로 동작
+	OAuth2.0 - Scope : OAuth2.0의 클라이언트가 리소스 서버에 접근 할 수 있는 제한 범위 내용
+
+	OAuth2.0의 openId를 가진 scope를 전달 받으면, OIDC는 액세스 토큰과 함께 사용자 인증에 대한 정보를 ID token (JWT 토큰)으로 반환 
+
+### 참고
+- https://hudi.blog/open-id/
+- https://medium.com/@saltmine_olive/openid란-무엇일까요-e4565502ef92
