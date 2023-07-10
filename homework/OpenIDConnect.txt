@@ -1,0 +1,47 @@
+# OpenID Connect
+	- 서로 연계된 서비스 간에 사용자의 인증 등을 오픈해주는 기술
+	- OIDC Foundation에서 지속적으로 발전시키고 있음 (https://openid.net)
+
+# IDP?
+	IDentity Provider의 약자
+	Google, Apple 등과 같은 간편 로그인 서비스 제공 회사 
+	- 역할
+		특정 서비스에서 로그인할 수 있도록 사용자를 신원증명(aka 인증)
+
+	IDP와 SP(Service Provider) 사이 사용자 인증을 위한 증명 정보 통신 필요 
+	=> 대표 기술 OAuth 2.0
+
+# 인증(Authentication)과 인가(Authorization)
+	인증
+		Authentication
+		사용자가 누구인지 확인하는 절차
+		회원가입, 로그인
+	인가
+		Authorization
+		사용자의 사용 권한 허락 절차
+		특정 서비스에 로그인 한 후 이뤄지는 사용자의 행위에 대해 허가 
+
+	=> 인증과 인가 API 형태로 빈번하게 일어나며
+	
+
+# SSO (Single Sign-On)
+	큰 범주에서 모두 SSO (Single Sign-On) 속하지만 사용 범주나 개발 언어 스펙에서 차이점을 보임
+	OpenID
+	SAML(Security Assertion Markup Language) - XML 
+		개방형 인증(Authentication)과 인가 (Authorization)의 표준
+		XML 언어로 개발됨 (글 작성 시점인 21년 8월 기준 SAML 2.0)
+	OAuth 
+		개방형 인가(Authorization)의 표준 
+		API를 연동하고 허가하기 위해 JSON으로 개발됨 (글 작성 시점 기준 OAuth2.0)
+	OIDC (OpenID Connect)
+		개방형 인증 (Authentication)의 표준
+		컨슈머 앱(앱스토어/구글 플레이스토어에 올라가있는 앱) 간의 SSO 인가 목적
+		JSON으로 개발됨 (글 작성 시점 기준 OIDC 2.0)
+
+# OIDC
+	OAuth 위에서 구동되는 기술
+	인가에 목적이 있는 OAuth의 절차가 복잡 -> 좀 더 간단하게 하고자 나온 기술 
+
+	인증을 위한 토큰을 보낼 때 Access Token 와 ID Token을 함께 보낼 수 있음
+	=> transaction이 반으로 줄어 인증 속도가 빨라지며
+		네트워크에 부담을 덜 줌 
