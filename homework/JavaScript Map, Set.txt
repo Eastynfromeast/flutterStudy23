@@ -1,0 +1,5 @@
+JavaScript Map, Set
+
+# Map
+    ## Map이란?
+        키(Key)와 값(Value)를 넣을 수 있는 컬렉션 자료 구조
